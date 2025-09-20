@@ -47,6 +47,23 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // SheharFix specific colors
+        citizen: {
+          DEFAULT: "hsl(var(--citizen))",
+          foreground: "hsl(var(--citizen-foreground))",
+        },
+        admin: {
+          DEFAULT: "hsl(var(--admin))",
+          foreground: "hsl(var(--admin-foreground))",
+        },
+        success: "hsl(var(--success))",
+        warning: "hsl(var(--warning))",
+        info: "hsl(var(--info))",
+        "status-reported": "hsl(var(--status-reported))",
+        "status-acknowledged": "hsl(var(--status-acknowledged))",
+        "status-progress": "hsl(var(--status-progress))",
+        "status-resolved": "hsl(var(--status-resolved))",
+        "status-closed": "hsl(var(--status-closed))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
