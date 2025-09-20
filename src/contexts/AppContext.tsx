@@ -53,7 +53,8 @@ const translations = {
     profile: "Profile",
     transparency: "Transparency",
     publicView: "Public View",
-    logout: "Logout"
+  logout: "Logout",
+  signOut: "Sign Out"
   },
   hi: {
     chooseRole: "भूमिका चुनें",
@@ -82,7 +83,8 @@ const translations = {
     profile: "प्रोफ़ाइल",
     transparency: "पारदर्शिता",
     publicView: "सार्वजनिक दृश्य",
-    logout: "लॉगआउट"
+  logout: "लॉगआउट",
+  signOut: "साइन आउट"
   },
   mr: {
     chooseRole: "भूमिका निवडा",
@@ -111,7 +113,8 @@ const translations = {
     profile: "प्रोफाइल",
     transparency: "पारदर्शकता",
     publicView: "सार्वजनिक दृश्य",
-    logout: "लॉगआउट"
+  logout: "लॉगआउट",
+  signOut: "साइन आउट"
   }
 };
 

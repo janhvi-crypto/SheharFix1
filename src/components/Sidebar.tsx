@@ -152,7 +152,7 @@ const Sidebar = () => {
           className="flex items-center space-x-3 px-3 py-2 text-sm w-full text-left justify-start text-muted-foreground hover:text-foreground hover:bg-accent"
         >
           <LogOut className="w-4 h-4" />
-          <span>{t('logout')}</span>
+          <span>{t('signOut')}</span>
         </Button>
       </div>
     </div>

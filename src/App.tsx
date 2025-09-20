@@ -13,6 +13,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ReportIssue from "./pages/ReportIssue";
 import Analytics from "./pages/Analytics";
 import Leaderboard from "./pages/Leaderboard";
+import PublicView from "./pages/PublicView";
+import Transparency from "./pages/Transparency";
+import NGOPartners from "./pages/NGOPartners";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,9 @@ const App = () => (
               <Route path="/report-issue" element={<ReportIssue />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/public-view" element={<PublicView />} />
+              <Route path="/transparency" element={<Transparency />} />
+              <Route path="/ngo" element={<NGOPartners />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTheme } from 'next-themes';
 import { useApp, useTranslation, Language } from '@/contexts/AppContext';
+import logo from '@/assets/sheharfix-logo.png';
 
 interface RoleSelectionProps {
   onContinue: (role: 'citizen' | 'admin') => void;
@@ -59,9 +60,16 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({ onContinue }) => {
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-4xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <img src={logo} alt="SheharFix" className="w-12 h-12" />
+              <div>
+                <h1 className="text-4xl font-bold text-foreground">SheharFix</h1>
+                <p className="text-lg text-muted-foreground">{t('findItFlagItFixIt')}</p>
+              </div>
+            </div>
+            <h2 className="text-2xl font-semibold text-foreground mb-2">
               {t('chooseRole')}
-            </h1>
+            </h2>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
