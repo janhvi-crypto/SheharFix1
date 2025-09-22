@@ -17,6 +17,8 @@ import PublicView from "./pages/PublicView";
 import Transparency from "./pages/Transparency";
 import NGOPartners from "./pages/NGOPartners";
 
+import Profile from './pages/Profile';
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -38,6 +40,7 @@ const App = () => (
               <Route path="/public-view" element={<PublicView />} />
               <Route path="/transparency" element={<Transparency />} />
               <Route path="/ngo" element={<NGOPartners />} />
+              <Route path="/profile" element={<Profile />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

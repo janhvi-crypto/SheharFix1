@@ -12,6 +12,9 @@ interface User {
   points?: number;
   level?: number;
   badges?: string[];
+  phone?: string;
+  location?: string;
+  bio?: string;
 }
 
 interface AppContextType {
@@ -19,6 +22,7 @@ interface AppContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   login: (email: string, password: string, role: UserRole) => Promise<boolean>;
+  signup: (userData: { name: string; email: string; phone: string; role: UserRole }) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   isNavigating: boolean;
@@ -164,6 +168,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return false;
   };
 
+  const signup = async (userData: { name: string; email: string; phone: string; role: UserRole }) => {
+    // Mock signup - in real implementation, this would call your API
+    const mockUser: User = {
+      id: Date.now().toString(),
+      name: userData.name,
+      email: userData.email,
+      role: userData.role,
+      phone: userData.phone,
+      points: userData.role === 'citizen' ? 0 : undefined,
+      level: userData.role === 'citizen' ? 1 : undefined,
+      badges: userData.role === 'citizen' ? [] : undefined,
+    };
+    
+    setUser(mockUser);
+    localStorage.setItem('sheharfix-user', JSON.stringify(mockUser));
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('sheharfix-user');
@@ -175,6 +196,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       language,
       setLanguage: handleSetLanguage,
       login,
+      signup,
       logout,
       isLoading,
       isNavigating,
