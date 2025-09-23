@@ -28,20 +28,26 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ className = "" }) => {
 
   // Mock issue data across India
   const issueMarkers: IssueMarker[] = [
-    { id: 1, lat: 28.6139, lng: 77.2090, title: 'Delhi Road Issue', category: 'Roads', priority: 'high', status: 'open', reportCount: 15, state: 'Delhi' },
-    { id: 2, lat: 19.0760, lng: 72.8777, title: 'Mumbai Drainage', category: 'Drainage', priority: 'medium', status: 'in-progress', reportCount: 8, state: 'Maharashtra' },
-    { id: 3, lat: 12.9716, lng: 77.5946, title: 'Bangalore Pothole', category: 'Roads', priority: 'high', status: 'open', reportCount: 22, state: 'Karnataka' },
-    { id: 4, lat: 13.0827, lng: 80.2707, title: 'Chennai Street Light', category: 'Lighting', priority: 'low', status: 'resolved', reportCount: 5, state: 'Tamil Nadu' },
-    { id: 5, lat: 22.5726, lng: 88.3639, title: 'Kolkata Garbage', category: 'Sanitation', priority: 'medium', status: 'open', reportCount: 12, state: 'West Bengal' },
+    { id: 1, lat: 28.6139, lng: 77.2090, title: 'Delhi Road Pothole', category: 'Roads', priority: 'high', status: 'open', reportCount: 15, state: 'Delhi' },
+    { id: 2, lat: 19.0760, lng: 72.8777, title: 'Mumbai Drainage Block', category: 'Drainage', priority: 'medium', status: 'in-progress', reportCount: 8, state: 'Maharashtra' },
+    { id: 3, lat: 12.9716, lng: 77.5946, title: 'Bangalore Street Light', category: 'Lighting', priority: 'high', status: 'open', reportCount: 22, state: 'Karnataka' },
+    { id: 4, lat: 13.0827, lng: 80.2707, title: 'Chennai Garbage Issue', category: 'Sanitation', priority: 'low', status: 'resolved', reportCount: 5, state: 'Tamil Nadu' },
+    { id: 5, lat: 22.5726, lng: 88.3639, title: 'Kolkata Water Problem', category: 'Water', priority: 'medium', status: 'open', reportCount: 12, state: 'West Bengal' },
+    { id: 6, lat: 26.9124, lng: 75.7873, title: 'Jaipur Road Repair', category: 'Roads', priority: 'high', status: 'in-progress', reportCount: 18, state: 'Rajasthan' },
+    { id: 7, lat: 23.0225, lng: 72.5714, title: 'Ahmedabad Drainage', category: 'Drainage', priority: 'medium', status: 'open', reportCount: 9, state: 'Gujarat' },
+    { id: 8, lat: 17.3850, lng: 78.4867, title: 'Hyderabad Sanitation', category: 'Sanitation', priority: 'high', status: 'open', reportCount: 14, state: 'Telangana' },
   ];
 
-  // Mock state data for heatmap
+  // Mock state data for heatmap across India
   const stateData = [
     { name: 'Maharashtra', totalReports: 245, highPriority: 45, lat: 19.7515, lng: 75.7139 },
     { name: 'Karnataka', totalReports: 189, highPriority: 32, lat: 15.3173, lng: 75.7139 },
     { name: 'Delhi', totalReports: 167, highPriority: 28, lat: 28.7041, lng: 77.1025 },
     { name: 'Tamil Nadu', totalReports: 134, highPriority: 22, lat: 11.1271, lng: 78.6569 },
     { name: 'West Bengal', totalReports: 98, highPriority: 15, lat: 22.9868, lng: 87.8550 },
+    { name: 'Rajasthan', totalReports: 87, highPriority: 12, lat: 27.0238, lng: 74.2179 },
+    { name: 'Gujarat', totalReports: 76, highPriority: 9, lat: 22.2587, lng: 71.1924 },
+    { name: 'Telangana', totalReports: 65, highPriority: 8, lat: 18.1124, lng: 79.0193 },
   ];
 
   const getPriorityColor = (priority: string) => {
@@ -66,7 +72,9 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ className = "" }) => {
     if (selectedFilter === 'all') return true;
     if (selectedFilter === 'high-priority') return issue.priority === 'high';
     if (selectedFilter === 'open') return issue.status === 'open';
-    if (selectedFilter === 'state') return issue.state === 'Maharashtra'; // Example filter
+    if (selectedFilter === 'maharashtra') return issue.state === 'Maharashtra';
+    if (selectedFilter === 'karnataka') return issue.state === 'Karnataka';
+    if (selectedFilter === 'delhi') return issue.state === 'Delhi';
     return true;
   });
 
@@ -104,10 +112,12 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ className = "" }) => {
                   <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Issues</SelectItem>
+                  <SelectItem value="all">All India</SelectItem>
                   <SelectItem value="high-priority">High Priority</SelectItem>
                   <SelectItem value="open">Open Issues</SelectItem>
-                  <SelectItem value="state">By State</SelectItem>
+                  <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                  <SelectItem value="karnataka">Karnataka</SelectItem>
+                  <SelectItem value="delhi">Delhi</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -222,15 +232,18 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ className = "" }) => {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center text-muted-foreground">
                 <MapPin className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm font-medium">India Interactive Map</p>
-                <p className="text-xs">{filteredIssues.length} issues displayed</p>
+                <p className="text-sm font-medium">All India Civic Issues Map</p>
+                <p className="text-xs">{filteredIssues.length} issues displayed across India</p>
+                <p className="text-xs mt-1">Real-time data from {stateData.length} states</p>
               </div>
             </div>
           </div>
 
           {/* State Summary when in heatmap mode */}
           {heatmapMode && (
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div className="mt-4">
+              <h4 className="text-sm font-medium mb-3">India State-wise Issue Distribution</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3">
               {stateData.map((state) => (
                 <div key={state.name} className="p-3 border rounded-lg bg-card/50">
                   <div className="text-sm font-medium">{state.name}</div>
@@ -243,6 +256,7 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ className = "" }) => {
                   </div>
                 </div>
               ))}
+              </div>
             </div>
           )}
 
@@ -250,7 +264,7 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ className = "" }) => {
           <div className="mt-4">
             <h4 className="text-sm font-medium mb-2 flex items-center space-x-2">
               <Activity className="w-4 h-4" />
-              <span>Live Issue Feed</span>
+              <span>Live Issue Feed - All India</span>
             </h4>
             <div className="space-y-2 max-h-32 overflow-y-auto">
               {filteredIssues.slice(0, 5).map((issue) => (
