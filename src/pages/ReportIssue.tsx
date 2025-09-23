@@ -11,6 +11,7 @@ import Layout from '@/components/Layout';
 import LoadingScreen from '@/components/LoadingScreen';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { apiService } from '@/services/api';
 
 const ReportIssue = () => {
   const navigate = useNavigate();
@@ -146,7 +147,7 @@ const ReportIssue = () => {
     setIsSubmitting(true);
 
     try {
-      // Replace with actual API call to your backend
+      // Use API service to report issue with ML validation
       const reportData = {
         title: formData.title,
         description: formData.description,
@@ -158,21 +159,7 @@ const ReportIssue = () => {
         reportedBy: 'Current User' // Replace with actual user info
       };
 
-      // Call your backend API
-      const response = await fetch('/api/issues', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
-        },
-        body: JSON.stringify(reportData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit report');
-      }
-
-      const newIssue = await response.json();
+      await apiService.reportIssue(reportData);
       
       toast.success('Issue reported successfully! You will receive updates via notifications.');
       navigate('/dashboard');
