@@ -14,7 +14,7 @@ import streetlightImg from '@/assets/sample-streetlight.jpg';
 
 const CitizenDashboard = () => {
   const navigate = useNavigate();
-  const { user } = useApp();
+  const { user, issues } = useApp();
 
   const stats = [
     { title: 'Issues Reported', value: '12', change: '+2', icon: AlertCircle, color: 'text-blue-600' },
@@ -23,31 +23,22 @@ const CitizenDashboard = () => {
     { title: 'Community Impact', value: '1,247', change: '+89', icon: Users, color: 'text-purple-600' },
   ];
 
-  const recentIssues = [
+  // Use actual issues from context combined with static data
+  const contextIssuesForDisplay = issues.slice(0, 2).map(issue => ({
+    id: issue.id,
+    title: issue.title,
+    description: issue.description,
+    category: issue.category,
+    status: issue.status,
+    reportedBy: issue.reportedBy,
+    date: issue.reportedDate,
+    image: issue.image,
+    location: issue.location
+  }));
+
+  const staticIssues = [
     {
-      id: 1,
-      title: 'Pothole on MG Road',
-      description: 'Large pothole causing traffic issues near the intersection with Church Street.',
-      category: 'Roads',
-      status: 'resolved',
-      reportedBy: 'Rajesh Kumar',
-      date: '2024-01-15',
-      image: potholeImg,
-      location: 'MG Road, Bangalore'
-    },
-    {
-      id: 2,
-      title: 'Garbage accumulation near Park',
-      description: 'Overflowing garbage bins and scattered waste near Cubbon Park entrance.',
-      category: 'Sanitation',
-      status: 'progress',
-      reportedBy: 'Priya Sharma',
-      date: '2024-01-14',
-      image: garbageImg,
-      location: 'Cubbon Park, Bangalore'
-    },
-    {
-      id: 3,
+      id: 1001,
       title: 'Blocked drainage system',
       description: 'Water logging during rains due to blocked drainage on residential street.',
       category: 'Drainage',
@@ -58,7 +49,7 @@ const CitizenDashboard = () => {
       location: 'Koramangala, Bangalore'
     },
     {
-      id: 4,
+      id: 1002,
       title: 'Street light not working',
       description: 'Multiple street lights are not functioning, making the area unsafe during nighttime.',
       category: 'Lighting',
@@ -69,6 +60,8 @@ const CitizenDashboard = () => {
       location: 'Jayanagar, Bangalore'
     }
   ];
+
+  const recentIssues = [...contextIssuesForDisplay, ...staticIssues].slice(0, 4);
 
   const getStatusColor = (status: string) => {
     switch (status) {
