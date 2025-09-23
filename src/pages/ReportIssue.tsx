@@ -146,13 +146,39 @@ const ReportIssue = () => {
     setIsSubmitting(true);
 
     try {
-      // Mock submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Replace with actual API call to your backend
+      const reportData = {
+        title: formData.title,
+        description: formData.description,
+        location: formData.location,
+        category: formData.category,
+        priority: formData.priority,
+        images: selectedImages,
+        isAnonymous: formData.anonymous,
+        reportedBy: 'Current User' // Replace with actual user info
+      };
+
+      // Call your backend API
+      const response = await fetch('/api/issues', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
+        },
+        body: JSON.stringify(reportData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit report');
+      }
+
+      const newIssue = await response.json();
       
       toast.success('Issue reported successfully! You will receive updates via notifications.');
       navigate('/dashboard');
     } catch (error) {
       toast.error('Failed to submit report. Please try again.');
+      console.error('Error submitting issue:', error);
     } finally {
       setIsSubmitting(false);
     }
