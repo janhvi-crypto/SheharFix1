@@ -16,9 +16,10 @@ import Leaderboard from "./pages/Leaderboard";
 import PublicView from "./pages/PublicView";
 import Transparency from "./pages/Transparency";
 import NGOPartners from "./pages/NGOPartners";
-
 import Profile from './pages/Profile';
 import ManageIssues from './pages/ManageIssues';
+import Heatmap from './pages/Heatmap';
+import Chatbot from './components/Chatbot';
 
 const queryClient = new QueryClient();
 
@@ -43,10 +44,15 @@ const App = () => (
               <Route path="/ngo" element={<NGOPartners />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/manage-issues" element={<ManageIssues />} />
+              <Route path="/heatmap" element={<Heatmap />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
+          
+          {/* Global Chatbot */}
+          <Chatbot />
+          
         </TooltipProvider>
       </AppProvider>
     </ThemeProvider>

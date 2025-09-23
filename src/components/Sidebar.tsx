@@ -58,7 +58,6 @@ const Sidebar = () => {
 
   const communityItems = [
     { path: '/public-view', icon: Eye, label: t('publicView') },
-    { path: '/transparency', icon: Shield, label: t('transparency') },
     { path: '/ngo', icon: Heart, label: 'NGO Partners' },
   ];
 

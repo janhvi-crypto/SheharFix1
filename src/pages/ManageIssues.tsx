@@ -9,7 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import LoadingScreen from '@/components/LoadingScreen';
 import AIIssueAnalyzer from '@/components/AIIssueAnalyzer';
-import JharkhandMap from '@/components/JharkhandMap';
+import IndiaMap from '@/components/IndiaMap';
+import indiaIssueMapImage from '@/assets/india-issue-map.jpg';
 import BeforeAfterGallery from '@/components/BeforeAfterGallery';
 import ImageViewer from '@/components/ImageViewer';
 import samplePothole from '@/assets/sample-pothole.jpg';
@@ -374,7 +375,7 @@ const ManageIssues = () => {
 
           {/* Interactive Map Tab */}
           <TabsContent value="map">
-            <JharkhandMap />
+            <IndiaMap />
           </TabsContent>
 
           {/* AI Analytics Tab */}
