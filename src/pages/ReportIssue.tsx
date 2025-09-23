@@ -9,11 +9,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Layout from '@/components/Layout';
 import LoadingScreen from '@/components/LoadingScreen';
 import { useApp } from '@/contexts/AppContext';
+import { useIssues } from '@/hooks/useIssues';
 import { Camera, MapPin, Mic, Upload, ArrowLeft, AlertCircle, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ReportIssue = () => {
-  const { user, uploadIssuePhoto } = useApp();
+  const { user } = useApp();
+  const { reportIssue } = useIssues();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
@@ -150,21 +152,16 @@ const ReportIssue = () => {
 
     setIsSubmitting(true);
     try {
-      // For now, just upload the first image and create a mock issue
-      // In your backend integration, you'll handle multiple images
-      if (formData.images.length > 0) {
-        await uploadIssuePhoto(Date.now(), formData.images[0]);
-      }
-      
-      // Create a simple success feedback
-      console.log('Issue submitted:', {
+      // Call the API to create the issue
+      await reportIssue({
         title: formData.title,
         description: formData.description,
         location: formData.location,
         category: formData.category,
         priority: formData.priority,
+        images: formData.images,
         isAnonymous: formData.isAnonymous,
-        reportedBy: formData.reportedBy
+        reportedBy: formData.isAnonymous ? 'Anonymous' : (user?.name || 'Anonymous')
       });
       
       // Reset form after successful submission
@@ -179,7 +176,8 @@ const ReportIssue = () => {
         reportedBy: user?.name || 'Anonymous'
       });
       
-      navigate('/dashboard');
+      // Navigate back to dashboard - the useIssues hook will handle real-time updates
+      navigate(user?.role === 'admin' ? '/admin-dashboard' : '/dashboard');
     } catch (error) {
       console.error('Failed to submit report:', error);
     } finally {
