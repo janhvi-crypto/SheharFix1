@@ -18,6 +18,7 @@ import Transparency from "./pages/Transparency";
 import NGOPartners from "./pages/NGOPartners";
 
 import Profile from './pages/Profile';
+import ManageIssues from './pages/ManageIssues';
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
               <Route path="/transparency" element={<Transparency />} />
               <Route path="/ngo" element={<NGOPartners />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/manage-issues" element={<ManageIssues />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

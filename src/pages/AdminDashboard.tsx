@@ -279,10 +279,16 @@ const AdminDashboard = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">Issues Assigned to You</h2>
-            <Button variant="outline" size="sm">
-              <MapPin className="w-4 h-4 mr-2" />
-              View on Map
-            </Button>
+            <div className="flex space-x-2">
+              <Button variant="outline" size="sm">
+                <MapPin className="w-4 h-4 mr-2" />
+                View on Map
+              </Button>
+              <Button size="sm" onClick={() => window.location.href = '/manage-issues'}>
+                <Settings className="w-4 h-4 mr-2" />
+                Manage Issues
+              </Button>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
