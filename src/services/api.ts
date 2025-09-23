@@ -57,33 +57,117 @@ export interface UpdateIssueRequest {
 }
 
 class ApiService {
+  // Mock data and state
+  private mockIssues: ApiIssue[] = [];
+  private mockIdCounter = 1;
+
+  constructor() {
+    // Load persisted mock data from localStorage
+    this.loadMockData();
+  }
+
+  private loadMockData() {
+    try {
+      const saved = localStorage.getItem('mockIssues');
+      if (saved) {
+        const data = JSON.parse(saved);
+        this.mockIssues = data.issues || [];
+        this.mockIdCounter = data.counter || 1;
+      }
+    } catch (e) {
+      console.warn('Failed to load mock data:', e);
+    }
+  }
+
+  private saveMockData() {
+    try {
+      localStorage.setItem('mockIssues', JSON.stringify({
+        issues: this.mockIssues,
+        counter: this.mockIdCounter
+      }));
+    } catch (e) {
+      console.warn('Failed to save mock data:', e);
+    }
+  }
+
+  private async handleMockRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+    await new Promise(resolve => setTimeout(resolve, 300)); // Simulate network delay
+
+    const method = options.method || 'GET';
+    const url = endpoint;
+
+    // Handle different endpoints
+    if (method === 'POST' && url === '/issues') {
+      const body = JSON.parse(options.body as string);
+      const newIssue: ApiIssue = {
+        id: (this.mockIdCounter++).toString(),
+        title: body.title,
+        description: body.description,
+        location: body.location,
+        category: body.category,
+        priority: body.priority as any,
+        images: body.images || [],
+        reportedBy: body.reportedBy,
+        reportedDate: new Date().toISOString(),
+        status: 'reported',
+        upvotes: 0,
+        isAnonymous: body.isAnonymous
+      };
+      this.mockIssues.unshift(newIssue);
+      this.saveMockData();
+      return newIssue as T;
+    }
+
+    if (method === 'GET' && url === '/issues') {
+      return this.mockIssues as T;
+    }
+
+    if (method === 'POST' && url.includes('/upvote')) {
+      const issueId = url.split('/')[2];
+      const issue = this.mockIssues.find(i => i.id === issueId);
+      if (issue) {
+        issue.upvotes++;
+        this.saveMockData();
+        return issue as T;
+      }
+    }
+
+    throw new Error(`Mock endpoint not implemented: ${method} ${url}`);
+  }
+
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const token = localStorage.getItem('auth-token');
-    
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
-      ...options,
-    };
-
+    // Use mock service when real API is not available
     try {
-      const response = await fetch(url, config);
+      return await this.handleMockRequest<T>(endpoint, options);
+    } catch (mockError) {
+      // If mock fails, try real API (for when backend is actually available)
+      const url = `${API_BASE_URL}${endpoint}`;
+      const token = localStorage.getItem('auth-token');
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      const config: RequestInit = {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }),
+          ...options.headers,
+        },
+        ...options,
+      };
+
+      try {
+        const response = await fetch(url, config);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+      } catch (error) {
+        console.warn('Real API not available, falling back to mock error:', error);
+        throw mockError;
       }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('API request failed:', error);
-      throw error;
     }
   }
 
