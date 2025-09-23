@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Plus, TrendingUp, AlertCircle, CheckCircle, Clock, Users, BarChart3, Trophy, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -75,18 +76,7 @@ const CitizenDashboard = () => {
       }
     }
     fetchIssues();
-
-    // Refetch when window regains focus (user comes back from other page)
-    const handleFocus = () => {
-      fetchIssues();
-    };
-    
-    window.addEventListener('focus', handleFocus);
-    
-    return () => { 
-      cancelled = true; 
-      window.removeEventListener('focus', handleFocus);
-    };
+    return () => { cancelled = true; };
   }, []);
 
   async function handleDeleteIssue(id: string) {
