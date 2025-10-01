@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type Language = 'en' | 'hi' | 'mr';
-export type UserRole = 'citizen' | 'admin';
+export type Language = 'en' | 'hi';
+export type UserRole = 'citizen' | 'admin' | 'department';
+export type DepartmentCategory = 'potholes' | 'garbage' | 'street lights' | 'drainage' | 'water supply' | 'sanitation' | 'traffic signals' | 'park maintenance' | 'noise pollution' | 'other';
 
 interface User {
   id: string;
@@ -15,6 +16,7 @@ interface User {
   phone?: string;
   location?: string;
   bio?: string;
+  departmentCategory?: DepartmentCategory;
 }
 
 interface Issue {
@@ -43,8 +45,8 @@ interface AppContextType {
   issues: Issue[];
   resolvedIssues: Issue[];
   setLanguage: (lang: Language) => void;
-  login: (email: string, password: string, role: UserRole) => Promise<boolean>;
-  signup: (userData: { name: string; email: string; phone: string; role: UserRole }) => Promise<void>;
+  login: (email: string, password: string, role: UserRole, departmentCategory?: DepartmentCategory) => Promise<boolean>;
+  signup: (userData: { name: string; email: string; phone: string; role: UserRole; departmentCategory?: DepartmentCategory }) => Promise<void>;
   logout: () => void;
   uploadIssuePhoto: (issueId: number, photoFile: File) => Promise<string>;
   markIssueResolved: (issueId: number, afterImage?: string, cost?: string) => void;
@@ -116,36 +118,6 @@ const translations = {
   logout: "लॉगआउट",
   signOut: "साइन आउट"
   },
-  mr: {
-    chooseRole: "भूमिका निवडा",
-    citizen: "नागरिक",
-    administrator: "प्रशासक",
-    continueAsCitizen: "नागरिक म्हणून सुरू ठेवा",
-    continueAsAdmin: "प्रशासक म्हणून सुरू ठेवा",
-    reportIssues: "फोटोसह नागरी समस्यांचा अहवाल द्या",
-    trackProgress: "समस्या निराकरणाची प्रगती ट्रॅक करा",
-    earnPoints: "गुण आणि बॅज मिळवा",
-    voiceReporting: "आवाज-सक्षम अहवाल",
-    manageIssues: "समस्यांचे व्यवस्थापन आणि निराकरण करा",
-    accessAnalytics: "हीटमॅप आणि अॅनालिटिक्स अॅक्सेस करा",
-    uploadPhotos: "आधी/नंतरचे फोटो अपलोड करा",
-    navigateLocations: "समस्या स्थानांवर नेव्हिगेट करा",
-    findItFlagItFixIt: "शोधा, चिन्हांकित करा, दुरुस्त करा",
-    loadingDashboard: "तुमचे डॅशबोर्ड लोड होत आहे...",
-    welcome: "SheharFix मध्ये आपले स्वागत आहे",
-    login: "लॉगिन",
-    email: "ईमेल",
-    password: "पासवर्ड",
-    dashboard: "डॅशबोर्ड",
-    reportIssue: "समस्या कळवा",
-    analytics: "अॅनालिटिक्स",
-    leaderboard: "लीडरबोर्ड",
-    profile: "प्रोफाइल",
-    transparency: "पारदर्शकता",
-    publicView: "सार्वजनिक दृश्य",
-  logout: "लॉगआउट",
-  signOut: "साइन आउट"
-  }
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -241,18 +213,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('sheharfix-language', lang);
   };
 
-  const login = async (email: string, password: string, role: UserRole): Promise<boolean> => {
+  const login = async (email: string, password: string, role: UserRole, departmentCategory?: DepartmentCategory): Promise<boolean> => {
     // Mock authentication
     if (email && password) {
       const mockUser: User = {
         id: Math.random().toString(36).substr(2, 9),
-        name: role === 'citizen' ? 'Priya Sharma' : 'Rajesh Kumar',
+        name: role === 'citizen' ? 'Priya Sharma' : role === 'department' ? 'Department Officer' : 'Rajesh Kumar',
         email,
         role,
         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
         points: role === 'citizen' ? 1247 : undefined,
         level: role === 'citizen' ? 5 : undefined,
-        badges: role === 'citizen' ? ['Street Guardian', 'Voice of Change'] : undefined
+        badges: role === 'citizen' ? ['Street Guardian', 'Voice of Change'] : undefined,
+        departmentCategory: role === 'department' ? departmentCategory : undefined
       };
       
       setUser(mockUser);
@@ -262,7 +235,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return false;
   };
 
-  const signup = async (userData: { name: string; email: string; phone: string; role: UserRole }) => {
+  const signup = async (userData: { name: string; email: string; phone: string; role: UserRole; departmentCategory?: DepartmentCategory }) => {
     // Mock signup - in real implementation, this would call your API
     const mockUser: User = {
       id: Date.now().toString(),
@@ -273,6 +246,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       points: userData.role === 'citizen' ? 0 : undefined,
       level: userData.role === 'citizen' ? 1 : undefined,
       badges: userData.role === 'citizen' ? [] : undefined,
+      departmentCategory: userData.role === 'department' ? userData.departmentCategory : undefined,
     };
     
     setUser(mockUser);
