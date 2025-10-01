@@ -36,6 +36,38 @@ const DepartmentDashboard = () => {
   const [issues, setIssues] = useState<UiIssue[]>([]);
   const [loadingIssues, setLoadingIssues] = useState(true);
 
+  // Department to issue category mapping
+  const getDepartmentIssueCategories = (departmentCategory: string): string[] => {
+    const dept = departmentCategory.toLowerCase();
+    const mapping: Record<string, string[]> = {
+      'potholes': ['potholes', 'road maintenance', 'road damage'],
+      'garbage': ['garbage', 'waste management', 'sanitation', 'cleanliness'],
+      'street lights': ['street lights', 'street lighting', 'lighting'],
+      'drainage': ['drainage', 'sewage', 'waterlogging'],
+      'water supply': ['water supply', 'lack of water', 'water shortage', 'water'],
+      'park maintenance': ['park maintenance', 'park', 'playground', 'garden'],
+      'traffic signals': ['traffic signals', 'traffic lights', 'traffic', 'road rage'],
+      'noise pollution': ['noise pollution', 'noise', 'pollution'],
+    };
+    
+    // Find matching department
+    for (const [key, categories] of Object.entries(mapping)) {
+      if (dept.includes(key) || key.includes(dept)) {
+        return categories;
+      }
+    }
+    return [];
+  };
+
+  const isIssueBelongsToDepartment = (issueCategory: string, departmentCategory: string): boolean => {
+    const allowedCategories = getDepartmentIssueCategories(departmentCategory);
+    const issueCat = issueCategory.toLowerCase();
+    
+    return allowedCategories.some(cat => 
+      issueCat.includes(cat) || cat.includes(issueCat)
+    );
+  };
+
   useEffect(() => {
     let cancelled = false;
     async function fetchIssues() {
@@ -46,13 +78,12 @@ const DepartmentDashboard = () => {
         if (cancelled) return;
         
         // Filter issues based on department category
-        const departmentCategory = user?.departmentCategory?.toLowerCase() || '';
+        const departmentCategory = user?.departmentCategory || '';
         const mapped: UiIssue[] = rows
           .filter((row) => {
-            const issueCategory = String(row.category || '').toLowerCase();
-            // Match category keywords
-            return issueCategory.includes(departmentCategory) || 
-                   departmentCategory.includes(issueCategory.split(' ')[0]);
+            if (!departmentCategory) return true;
+            const issueCategory = String(row.category || '');
+            return isIssueBelongsToDepartment(issueCategory, departmentCategory);
           })
           .map((row) => ({
             id: row._id,
