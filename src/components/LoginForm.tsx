@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Users, Shield } from 'lucide-react';
+import { ArrowLeft, Users, Shield, Building2 } from 'lucide-react';
 import { useApp, useTranslation, UserRole } from '@/contexts/AppContext';
 import toast from 'react-hot-toast';
 
@@ -78,6 +78,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onBack, onSuccess }) => {
       color: 'admin',
       title: t('administrator'),
       description: 'Access administrative tools to manage civic issues'
+    },
+    department: {
+      icon: Building2,
+      color: 'primary',
+      title: 'Department',
+      description: 'Access department tools to resolve category-specific issues'
     }
   };
 
@@ -144,7 +150,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onBack, onSuccess }) => {
               
               <Button
                 type="submit"
-                className={`w-full ${role === 'citizen' ? 'btn-citizen' : 'btn-admin'}`}
+                className={`w-full ${role === 'citizen' ? 'btn-citizen' : role === 'admin' ? 'btn-admin' : 'bg-primary hover:bg-primary/90'}`}
                 disabled={isLoading}
               >
                 {isLoading ? 'Signing in...' : t('login')}
