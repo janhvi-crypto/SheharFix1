@@ -20,7 +20,12 @@ const Index = () => {
         if (user.role === 'citizen') {
           navigate('/dashboard');
         } else if (user.role === 'department') {
-          navigate('/department-dashboard');
+          // Check if department category is selected
+          if (!user.departmentCategory) {
+            navigate('/select-department');
+          } else {
+            navigate('/department-dashboard');
+          }
         } else {
           navigate('/admin-dashboard');
         }

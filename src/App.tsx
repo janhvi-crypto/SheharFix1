@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import CitizenDashboard from "./pages/CitizenDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import DepartmentDashboard from "./pages/DepartmentDashboard";
+import DepartmentSelection from "./components/DepartmentSelection";
 import ReportIssue from "./pages/ReportIssue";
 import Analytics from "./pages/Analytics";
 import Leaderboard from "./pages/Leaderboard";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/dashboard" element={<CitizenDashboard />} />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
               <Route path="/department-dashboard" element={<DepartmentDashboard />} />
+              <Route path="/select-department" element={<DepartmentSelection />} />
               <Route path="/report-issue" element={<ReportIssue />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/leaderboard" element={<Leaderboard />} />

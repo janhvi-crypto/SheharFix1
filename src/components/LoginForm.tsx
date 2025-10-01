@@ -55,7 +55,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ role, onBack, onSuccess }) => {
       const success = await login(email, password, role);
       if (success) {
         toast.success(`Welcome! Logged in as ${role}`);
-        onSuccess();
+        
+        // Redirect based on role
+        if (role === 'department') {
+          window.location.href = '/select-department';
+        } else {
+          onSuccess();
+        }
       } else {
         toast.error('Invalid credentials');
       }

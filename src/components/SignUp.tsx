@@ -64,10 +64,6 @@ const SignUp: React.FC<SignUpProps> = ({ role, onBack, onSuccess }) => {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
-    if (role === 'department' && !formData.departmentCategory) {
-      newErrors.departmentCategory = 'Please select a department category';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -89,12 +85,17 @@ const SignUp: React.FC<SignUpProps> = ({ role, onBack, onSuccess }) => {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        role,
-        departmentCategory: role === 'department' ? formData.departmentCategory : undefined
+        role
       });
       
       toast.success(`Welcome to SheharFix! Your ${role} account has been created.`);
-      onSuccess();
+      
+      // Redirect based on role
+      if (role === 'department') {
+        window.location.href = '/select-department';
+      } else {
+        onSuccess();
+      }
     } catch (error) {
       toast.error('Failed to create account. Please try again.');
     } finally {
@@ -224,33 +225,6 @@ const SignUp: React.FC<SignUpProps> = ({ role, onBack, onSuccess }) => {
               )}
             </div>
 
-            {/* Department Category (only for department role) */}
-            {role === 'department' && (
-              <div className="space-y-2">
-                <Label htmlFor="departmentCategory">Department Category</Label>
-                <Select
-                  value={formData.departmentCategory}
-                  onValueChange={(value) => handleInputChange('departmentCategory', value as DepartmentCategory)}
-                >
-                  <SelectTrigger className={errors.departmentCategory ? 'border-destructive' : ''}>
-                    <SelectValue placeholder="Select your department" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="potholes">Road & Potholes</SelectItem>
-                    <SelectItem value="garbage">Garbage & Sanitation</SelectItem>
-                    <SelectItem value="street lights">Street Lights</SelectItem>
-                    <SelectItem value="drainage">Drainage & Water</SelectItem>
-                    <SelectItem value="water supply">Water Supply</SelectItem>
-                    <SelectItem value="park maintenance">Parks & Recreation</SelectItem>
-                    <SelectItem value="traffic signals">Traffic Management</SelectItem>
-                    <SelectItem value="noise pollution">Noise & Pollution Control</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.departmentCategory && (
-                  <p className="text-sm text-destructive">{errors.departmentCategory}</p>
-                )}
-              </div>
-            )}
 
             {/* Password Field */}
             <div className="space-y-2">

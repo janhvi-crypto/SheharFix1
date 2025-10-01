@@ -41,6 +41,7 @@ interface Issue {
 
 interface AppContextType {
   user: User | null;
+  setUser: (user: User | null) => void;
   language: Language;
   issues: Issue[];
   resolvedIssues: Issue[];
@@ -121,12 +122,21 @@ const translations = {
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUserState] = useState<User | null>(null);
   const [language, setLanguage] = useState<Language>('en');
   const [isLoading, setIsLoading] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
   const [issues, setIssues] = useState<Issue[]>([]);
   const [resolvedIssues, setResolvedIssues] = useState<Issue[]>([]);
+
+  const setUser = (newUser: User | null) => {
+    setUserState(newUser);
+    if (newUser) {
+      localStorage.setItem('sheharfix_user', JSON.stringify(newUser));
+    } else {
+      localStorage.removeItem('sheharfix_user');
+    }
+  };
 
   useEffect(() => {
     // Load saved language and user from localStorage
@@ -306,6 +316,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   return (
     <AppContext.Provider value={{
       user,
+      setUser,
       language,
       issues,
       resolvedIssues,
